@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NutriSnap — Mobile App Screen Designs</title>
+<style>
+  /* ── Reset & Base ─────────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #f0f0f5;
+    color: #1a1a2e;
+    padding: 40px 20px 80px;
+  }
+  h1.page-title {
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 8px;
+    color: #1a1a2e;
+  }
+  p.page-subtitle {
+    text-align: center;
+    color: #666;
+    margin-bottom: 48px;
+    font-size: 15px;
+  }
+
+  /* ── Screen Grid ──────────────────────────────────── */
+  .screen-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 48px;
+    margin-bottom: 64px;
+  }
+  .screen-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .screen-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    margin-bottom: 12px;
+  }
+  .screen-notes {
+    max-width: 375px;
+    margin-top: 16px;
+    font-size: 13px;
+    color: #777;
+    line-height: 1.5;
+    text-align: center;
+  }
+
+  /* ── Phone Frame ──────────────────────────────────── */
+  .phone {
+    width: 375px;
+    height: 812px;
+    border-radius: 40px;
+    background: #fff;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15), 0 0 0 2px #d0d0d0;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Status Bar ───────────────────────────────────── */
+  .status-bar {
+    height: 54px;
+    padding: 14px 24px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 15px;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+  .status-bar .time { font-size: 16px; font-weight: 700; }
+  .status-bar .icons { display: flex; gap: 6px; align-items: center; }
+  .status-bar .icons span { font-size: 13px; }
+  .status-bar-light { color: #fff; }
+  .status-bar-dark { color: #1a1a2e; }
+
+  /* Dynamic Island */
+  .dynamic-island {
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 34px;
+    background: #000;
+    border-radius: 20px;
+    z-index: 10;
+  }
+
+  /* ── Home Indicator ───────────────────────────────── */
+  .home-indicator {
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .home-indicator span {
+    width: 134px;
+    height: 5px;
+    background: #ccc;
+    border-radius: 3px;
+  }
+  .home-indicator-dark span { background: rgba(255,255,255,0.3); }
+
+  /* ── Tab Bar ──────────────────────────────────────── */
+  .tab-bar {
+    height: 64px;
+    background: #fff;
+    border-top: 1px solid #e5e5e5;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-shrink: 0;
+    padding: 0 8px;
+  }
+  .tab-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    font-size: 10px;
+    color: #999;
+  }
+  .tab-item.active { color: #4CAF50; }
+  .tab-icon {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+  }
+
+  /* ── Content Helpers ──────────────────────────────── */
+  .screen-content {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── SCREEN 1: Camera / Home ──────────────────────── */
+  .camera-screen { background: #111; }
+  .camera-viewfinder {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .camera-viewfinder .hint {
+    color: rgba(255,255,255,0.7);
+    font-size: 16px;
+    margin-bottom: 24px;
+    font-weight: 500;
+  }
+  .focus-frame {
+    width: 260px;
+    height: 260px;
+    border: 2px solid rgba(255,255,255,0.5);
+    border-radius: 24px;
+    position: relative;
+  }
+  .focus-corner {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    border-color: #4CAF50;
+    border-style: solid;
+    border-width: 0;
+  }
+  .focus-corner.tl { top: -2px; left: -2px; border-top-width: 3px; border-left-width: 3px; border-top-left-radius: 16px; }
+  .focus-corner.tr { top: -2px; right: -2px; border-top-width: 3px; border-right-width: 3px; border-top-right-radius: 16px; }
+  .focus-corner.bl { bottom: -2px; left: -2px; border-bottom-width: 3px; border-left-width: 3px; border-bottom-left-radius: 16px; }
+  .focus-corner.br { bottom: -2px; right: -2px; border-bottom-width: 3px; border-right-width: 3px; border-bottom-right-radius: 16px; }
+  .camera-controls {
+    padding: 24px 32px 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+  }
+  .shutter-btn {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: #fff;
+    border: 4px solid rgba(255,255,255,0.3);
+    box-shadow: 0 0 0 4px rgba(76,175,80,0.4);
+    cursor: pointer;
+  }
+  .camera-side-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    color: #fff;
+  }
+  .flash-indicator {
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    color: rgba(255,255,255,0.6);
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  /* ── SCREEN 2: Photo Review ───────────────────────── */
+  .review-screen { background: #111; }
+  .review-image {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .food-placeholder {
+    width: 320px;
+    height: 320px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #f5deb3 0%, #d2691e 50%, #8b4513 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 80px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  }
+  .review-actions {
+    padding: 20px 32px 8px;
+    display: flex;
+    gap: 16px;
+  }
+  .review-btn {
+    flex: 1;
+    height: 52px;
+    border-radius: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .btn-retake {
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+  }
+  .btn-analyze {
+    background: #4CAF50;
+    color: #fff;
+  }
+
+  /* ── SCREEN 3: Analyzing ──────────────────────────── */
+  .analyzing-screen { background: #fff; }
+  .analyzing-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+  }
+  .analyzing-food-img {
+    width: 180px;
+    height: 180px;
+    border-radius: 24px;
+    background: linear-gradient(135deg, #f5deb3 0%, #d2691e 50%, #8b4513 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 64px;
+    margin-bottom: 32px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  }
+  .analyzing-spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid #e0e0e0;
+    border-top-color: #4CAF50;
+    border-radius: 50%;
+    margin-bottom: 20px;
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .analyzing-text {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1a1a2e;
+    margin-bottom: 8px;
+  }
+  .analyzing-subtext {
+    font-size: 14px;
+    color: #999;
+  }
+  .analysis-steps {
+    margin-top: 36px;
+    width: 100%;
+    max-width: 260px;
+  }
+  .step {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    font-size: 14px;
+  }
+  .step-check {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    flex-shrink: 0;
+  }
+  .step-done { background: #4CAF50; color: #fff; }
+  .step-active { background: #e8f5e9; color: #4CAF50; border: 2px solid #4CAF50; }
+  .step-pending { background: #f0f0f0; color: #bbb; }
+  .step-text-done { color: #4CAF50; }
+  .step-text-active { color: #1a1a2e; font-weight: 600; }
+  .step-text-pending { color: #bbb; }
+
+  /* ── SCREEN 4: Results ────────────────────────────── */
+  .results-screen { background: #f8f9fa; }
+  .results-header {
+    background: #fff;
+    padding: 12px 20px 20px;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+  }
+  .results-food-img {
+    width: 100px;
+    height: 100px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #f5deb3 0%, #d2691e 50%, #8b4513 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 44px;
+    margin: 0 auto 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  }
+  .results-food-name {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+  .results-food-detail {
+    font-size: 13px;
+    color: #888;
+  }
+  .results-confidence {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: #e8f5e9;
+    color: #2e7d32;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 12px;
+    margin-top: 8px;
+  }
+  .results-body {
+    padding: 20px;
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  /* Calorie Ring */
+  .calorie-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .calorie-ring {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    background: conic-gradient(#4CAF50 0deg 216deg, #e8f5e9 216deg 360deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .calorie-ring-inner {
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .calorie-number {
+    font-size: 28px;
+    font-weight: 800;
+    color: #1a1a2e;
+    line-height: 1;
+  }
+  .calorie-unit {
+    font-size: 11px;
+    color: #999;
+    margin-top: 2px;
+  }
+  .calorie-info {
+    flex: 1;
+  }
+  .calorie-info-label {
+    font-size: 13px;
+    color: #999;
+    margin-bottom: 4px;
+  }
+  .calorie-info-value {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1a1a2e;
+    margin-bottom: 8px;
+  }
+  .calorie-budget {
+    font-size: 12px;
+    color: #4CAF50;
+    font-weight: 500;
+  }
+
+  /* Macro Bars */
+  .macros-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .macros-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+  .macro-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+  .macro-row:last-child { margin-bottom: 0; }
+  .macro-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 10px;
+    flex-shrink: 0;
+  }
+  .macro-name {
+    font-size: 14px;
+    color: #555;
+    width: 60px;
+  }
+  .macro-bar-bg {
+    flex: 1;
+    height: 10px;
+    background: #f0f0f0;
+    border-radius: 5px;
+    margin: 0 12px;
+    overflow: hidden;
+  }
+  .macro-bar-fill {
+    height: 100%;
+    border-radius: 5px;
+  }
+  .macro-value {
+    font-size: 14px;
+    font-weight: 700;
+    width: 40px;
+    text-align: right;
+  }
+
+  /* Nutrients List */
+  .nutrients-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .nutrients-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+  .nutrient-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 9px 0;
+    border-bottom: 1px solid #f5f5f5;
+    font-size: 14px;
+  }
+  .nutrient-row:last-child { border: none; }
+  .nutrient-name { color: #666; }
+  .nutrient-val { font-weight: 600; }
+
+  /* Action Buttons */
+  .results-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 4px;
+  }
+  .result-action-btn {
+    flex: 1;
+    height: 50px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    gap: 6px;
+  }
+  .btn-log {
+    background: #4CAF50;
+    color: #fff;
+  }
+  .btn-adjust {
+    background: #f0f0f5;
+    color: #1a1a2e;
+  }
+
+  /* ── SCREEN 5: Food Log ───────────────────────────── */
+  .log-screen { background: #f8f9fa; }
+  .log-header {
+    background: #fff;
+    padding: 4px 20px 16px;
+  }
+  .log-greeting {
+    font-size: 14px;
+    color: #999;
+    margin-bottom: 2px;
+  }
+  .log-title {
+    font-size: 24px;
+    font-weight: 800;
+  }
+  .log-date-strip {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+  }
+  .date-chip {
+    width: 44px;
+    height: 60px;
+    border-radius: 14px;
+    background: #f0f0f5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: #999;
+    gap: 2px;
+  }
+  .date-chip .day-num { font-size: 18px; font-weight: 700; color: #1a1a2e; }
+  .date-chip.today {
+    background: #4CAF50;
+    color: rgba(255,255,255,0.8);
+  }
+  .date-chip.today .day-num { color: #fff; }
+
+  .log-body {
+    padding: 20px;
+    flex: 1;
+    overflow-y: auto;
+  }
+  .log-summary-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .log-summary-box {
+    flex: 1;
+    background: #fff;
+    border-radius: 16px;
+    padding: 14px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .log-summary-val {
+    font-size: 22px;
+    font-weight: 800;
+  }
+  .log-summary-label {
+    font-size: 11px;
+    color: #999;
+    margin-top: 2px;
+  }
+  .meal-section-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 10px;
+  }
+  .meal-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 14px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .meal-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    flex-shrink: 0;
+  }
+  .meal-info { flex: 1; }
+  .meal-name { font-size: 15px; font-weight: 600; }
+  .meal-meta { font-size: 12px; color: #999; margin-top: 2px; }
+  .meal-cal {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1a1a2e;
+  }
+  .meal-cal-unit {
+    font-size: 11px;
+    color: #999;
+    font-weight: 400;
+  }
+
+  /* ── SCREEN 6: Daily Summary / Insights ───────────── */
+  .summary-screen { background: #f8f9fa; }
+  .summary-header {
+    background: linear-gradient(135deg, #4CAF50, #2e7d32);
+    padding: 4px 20px 24px;
+    color: #fff;
+    border-radius: 0 0 28px 28px;
+  }
+  .summary-title {
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 4px;
+  }
+  .summary-subtitle {
+    font-size: 13px;
+    opacity: 0.8;
+  }
+  .summary-cal-big {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin-top: 20px;
+  }
+  .summary-cal-num {
+    font-size: 48px;
+    font-weight: 800;
+    line-height: 1;
+  }
+  .summary-cal-of {
+    font-size: 16px;
+    opacity: 0.7;
+  }
+  .summary-progress-bar {
+    height: 8px;
+    background: rgba(255,255,255,0.25);
+    border-radius: 4px;
+    margin-top: 14px;
+    overflow: hidden;
+  }
+  .summary-progress-fill {
+    height: 100%;
+    width: 60%;
+    background: #fff;
+    border-radius: 4px;
+  }
+  .summary-body {
+    padding: 20px;
+    flex: 1;
+    overflow-y: auto;
+  }
+  .summary-macro-circles {
+    display: flex;
+    justify-content: space-around;
+    background: #fff;
+    border-radius: 20px;
+    padding: 20px 12px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .macro-circle-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .macro-circle {
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .macro-circle-inner {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .macro-circle-val { font-size: 14px; font-weight: 800; line-height: 1; }
+  .macro-circle-unit { font-size: 9px; color: #999; }
+  .macro-circle-label { font-size: 12px; color: #666; font-weight: 600; }
+
+  .insight-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .insight-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .insight-title {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .insight-text {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.4;
+  }
+
+  /* ── Section Dividers ─────────────────────────────── */
+  .section-divider {
+    text-align: center;
+    margin: 48px 0 32px;
+    position: relative;
+  }
+  .section-divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: #ddd;
+  }
+  .section-divider span {
+    background: #f0f0f5;
+    padding: 0 20px;
+    position: relative;
+    color: #888;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* ── Responsive ───────────────────────────────────── */
+  @media (max-width: 900px) {
+    .screen-row { flex-direction: column; align-items: center; }
+  }
+</style>
+</head>
+<body>
+
+<h1 class="page-title">NutriSnap</h1>
+<p class="page-subtitle">Mobile App Screen Designs — Food Photo Nutrition Analyzer</p>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- ROW 1: Camera  &  Photo Review                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="section-divider"><span>Capture Flow</span></div>
+
+<div class="screen-row">
+
+  <!-- SCREEN 1 ─ Camera / Home -->
+  <div class="screen-wrapper">
+    <div class="screen-label">1 — Camera (Home)</div>
+    <div class="phone camera-screen">
+      <div class="dynamic-island"></div>
+      <div class="status-bar status-bar-light">
+        <span class="time">9:41</span>
+        <div class="icons"><span>&#9679;&#9679;&#9679;&#9679;</span> <span>&#9632;</span></div>
+      </div>
+      <div class="camera-viewfinder">
+        <div class="flash-indicator">&#9889; Auto</div>
+        <div class="hint">Point at your food</div>
+        <div class="focus-frame">
+          <div class="focus-corner tl"></div>
+          <div class="focus-corner tr"></div>
+          <div class="focus-corner bl"></div>
+          <div class="focus-corner br"></div>
+        </div>
+      </div>
+      <div class="camera-controls">
+        <div class="camera-side-btn">&#128444;</div>
+        <div class="shutter-btn"></div>
+        <div class="camera-side-btn">&#8635;</div>
+      </div>
+      <div class="home-indicator home-indicator-dark"><span></span></div>
+    </div>
+    <div class="screen-notes">
+      Primary screen. Camera opens immediately.<br>
+      Green focus corners guide framing.<br>
+      Gallery &amp; flip-camera shortcuts at bottom.
+    </div>
+  </div>
+
+  <!-- SCREEN 2 ─ Photo Review -->
+  <div class="screen-wrapper">
+    <div class="screen-label">2 — Photo Review</div>
+    <div class="phone review-screen">
+      <div class="dynamic-island"></div>
+      <div class="status-bar status-bar-light">
+        <span class="time">9:41</span>
+        <div class="icons"><span>&#9679;&#9679;&#9679;&#9679;</span> <span>&#9632;</span></div>
+      </div>
+      <div class="review-image">
+        <div class="food-placeholder">&#127835;</div>
+      </div>
+      <div class="review-actions">
+        <div class="review-btn btn-retake">&#8592; Retake</div>
+        <div class="review-btn btn-analyze">Analyze &#10140;</div>
+      </div>
+      <div class="home-indicator home-indicator-dark"><span></span></div>
+    </div>
+    <div class="screen-notes">
+      User reviews the captured photo.<br>
+      "Retake" returns to camera, "Analyze" sends to AI.<br>
+      Clear two-button layout reduces friction.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- ROW 2: Analyzing  &  Results                        -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="section-divider"><span>Analysis Flow</span></div>
+
+<div class="screen-row">
+
+  <!-- SCREEN 3 ─ Analyzing -->
+  <div class="screen-wrapper">
+    <div class="screen-label">3 — Analyzing</div>
+    <div class="phone analyzing-screen">
+      <div class="dynamic-island"></div>
+      <div class="status-bar status-bar-dark">
+        <span class="time">9:41</span>
+        <div class="icons"><span>&#9679;&#9679;&#9679;&#9679;</span> <span>&#9632;</span></div>
+      </div>
+      <div class="screen-content analyzing-content">
+        <div class="analyzing-food-img">&#127835;</div>
+        <div class="analyzing-spinner"></div>
+        <div class="analyzing-text">Analyzing your food…</div>
+        <div class="analyzing-subtext">This usually takes 2-3 seconds</div>
+        <div class="analysis-steps">
+          <div class="step">
+            <div class="step-check step-done">&#10003;</div>
+            <span class="step-text-done">Food identified</span>
+          </div>
+          <div class="step">
+            <div class="step-check step-active">&#8230;</div>
+            <span class="step-text-active">Estimating portions</span>
+          </div>
+          <div class="step">
+            <div class="step-check step-pending">3</div>
+            <span class="step-text-pending">Calculating nutrition</span>
+          </div>
+        </div>
+      </div>
+      <div class="home-indicator"><span></span></div>
+    </div>
+    <div class="screen-notes">
+      Progress steps keep user informed.<br>
+      Spinner + stepped checklist builds trust.<br>
+      Typically completes in 2-3 seconds.
+    </div>
+  </div>
+
+  <!-- SCREEN 4 ─ Results -->
+  <div class="screen-wrapper">
+    <div class="screen-label">4 — Results</div>
+    <div class="phone results-screen">
+      <div class="dynamic-island"></div>
+      <div class="status-bar status-bar-dark">
+        <span class="time">9:41</span>
+        <div class="icons"><span>&#9679;&#9679;&#9679;&#9679;</span> <span>&#9632;</span></div>
+      </div>
+      <div class="screen-content">
+        <div class="results-header">
+          <div class="results-food-img">&#127835;</div>
+          <div class="results-food-name">Grilled Chicken Salad</div>
+          <div class="results-food-detail">~1.5 cups &middot; with dressing</div>
+          <div class="results-confidence">&#10003; 94% confidence</div>
+        </div>
+        <div class="results-body">
+          <!-- Calorie Ring -->
+          <div class="calorie-card">
+            <div class="calorie-ring">
+              <div class="calorie-ring-inner">
+                <div class="calorie-number">420</div>
+                <div class="calorie-unit">kcal</div>
+              </div>
+            </div>
+            <div class="calorie-info">
+              <div class="calorie-info-label">Serving size</div>
+              <div class="calorie-info-value">~350 g</div>
+              <div class="calorie-budget">60% of daily budget remaining</div>
+            </div>
+          </div>
+
+          <!-- Macros -->
+          <div class="macros-card">
+            <div class="macros-title">Macronutrients</div>
+            <div class="macro-row">
+              <div class="macro-dot" style="background:#FF9800"></div>
+              <div class="macro-name">Carbs</div>
+              <div class="macro-bar-bg"><div class="macro-bar-fill" style="width:30%;background:#FF9800"></div></div>
+              <div class="macro-value" style="color:#FF9800">18g</div>
+            </div>
+            <div class="macro-row">
+              <div class="macro-dot" style="background:#2196F3"></div>
+              <div class="macro-name">Protein</div>
+              <div class="macro-bar-bg"><div class="macro-bar-fill" style="width:65%;background:#2196F3"></div></div>
+              <div class="macro-value" style="color:#2196F3">38g</div>
+            </div>
+            <div class="macro-row">
+              <div class="macro-dot" style="background:#E91E63"></div>
+              <div class="macro-name">Fat</div>
+              <div class="macro-bar-bg"><div class="macro-bar-fill" style="width:45%;background:#E91E63"></div></div>
+              <div class="macro-value" style="color:#E91E63">22g</div>
+            </div>
+            <div class="macro-row">
+              <div class="macro-dot" style="background:#9C27B0"></div>
+              <div class="macro-name">Fiber</div>
+              <div class="macro-bar-bg"><div class="macro-bar-fill" style="width:20%;background:#9C27B0"></div></div>
+              <div class="macro-value" style="color:#9C27B0">6g</div>
+            </div>
+          </div>
+
+          <!-- Other nutrients -->
+          <div class="nutrients-card">
+            <div class="nutrients-title">Other Nutrients</div>
+            <div class="nutrient-row"><span class="nutrient-name">Sodium</span><span class="nutrient-val">680 mg</span></div>
+            <div class="nutrient-row"><span class="nutrient-name">Sugar</span><span class="nutrient-val">4 g</span></div>
+            <div class="nutrient-row"><span class="nutrient-name">Cholesterol</span><span class="nutrient-val">95 mg</span></div>
+            <div class="nutrient-row"><span class="nutrient-name">Vitamin A</span><span class="nutrient-val">42% DV</span></div>
+            <div class="nutrient-row"><span class="nutrient-name">Iron</span><span class="nutrient-val">15% DV</span></div>
+          </div>
+
+          <!-- Actions -->
+          <div class="results-actions">
+            <div class="result-action-btn btn-log">&#10003; Log Meal</div>
+            <div class="result-action-btn btn-adjust">&#9998; Adjust</div>
+          </div>
+        </div>
+      </div>
+      <div class="home-indicator"><span></span></div>
+    </div>
+    <div class="screen-notes">
+      Calorie ring shows at-a-glance total.<br>
+      Color-coded macro bars for quick scanning.<br>
+      "Log Meal" adds to daily tracker, "Adjust" lets user correct portions.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- ROW 3: Food Log  &  Daily Summary                   -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="section-divider"><span>Tracking &amp; Insights</span></div>
+
+<div class="screen-row">
+
+  <!-- SCREEN 5 ─ Food Log -->
+  <div class="screen-wrapper">
+    <div class="screen-label">5 — Food Log</div>
+    <div class="phone log-screen">
+      <div class="dynamic-island"></div>
+      <div class="status-bar status-bar-dark">
+        <span class="time">9:41</span>
+        <div class="icons"><span>&#9679;&#9679;&#9679;&#9679;</span> <span>&#9632;</span></div>
+      </div>
+      <div class="screen-content">
+        <div class="log-header">
+          <div class="log-greeting">Good afternoon</div>
+          <div class="log-title">Today's Meals</div>
+          <div class="log-date-strip">
+            <div class="date-chip"><span>Mon</span><span class="day-num">12</span></div>
+            <div class="date-chip"><span>Tue</span><span class="day-num">13</span></div>
+            <div class="date-chip"><span>Wed</span><span class="day-num">14</span></div>
+            <div class="date-chip"><span>Thu</span><span class="day-num">15</span></div>
+            <div class="date-chip today"><span>Fri</span><span class="day-num">16</span></div>
+            <div class="date-chip"><span>Sat</span><span class="day-num">17</span></div>
+            <div class="date-chip"><span>Sun</span><span class="day-num">18</span></div>
+          </div>
+        </div>
+        <div class="log-body">
+          <!-- Daily Summary -->
+          <div class="log-summary-row">
+            <div class="log-summary-box">
+              <div class="log-summary-val" style="color:#4CAF50">1,240</div>
+              <div class="log-summary-label">Calories</div>
+            </div>
+            <div class="log-summary-box">
+              <div class="log-summary-val" style="color:#2196F3">86g</div>
+              <div class="log-summary-label">Protein</div>
+            </div>
+            <div class="log-summary-box">
+              <div class="log-summary-val" style="color:#FF9800">112g</div>
+              <div class="log-summary-label">Carbs</div>
+            </div>
+          </div>
+
+          <!-- Breakfast -->
+          <div class="meal-section-title">Breakfast &middot; 8:15 AM</div>
+          <div class="meal-card">
+            <div class="meal-icon" style="background:#FFF3E0">&#129382;</div>
+            <div class="meal-info">
+              <div class="meal-name">Avocado Toast</div>
+              <div class="meal-meta">2 slices &middot; with egg</div>
+            </div>
+            <div class="meal-cal">380 <span class="meal-cal-unit">cal</span></div>
+          </div>
+          <div class="meal-card">
+            <div class="meal-icon" style="background:#E3F2FD">&#9749;</div>
+            <div class="meal-info">
+              <div class="meal-name">Oat Milk Latte</div>
+              <div class="meal-meta">Large &middot; no sugar</div>
+            </div>
+            <div class="meal-cal">120 <span class="meal-cal-unit">cal</span></div>
+          </div>
+
+          <!-- Lunch -->
+          <div class="meal-section-title" style="margin-top:20px">Lunch &middot; 12:30 PM</div>
+          <div class="meal-card">
+            <div class="meal-icon" style="background:#E8F5E9">&#127835;</div>
+            <div class="meal-info">
+              <div class="meal-name">Grilled Chicken Salad</div>
+              <div class="meal-meta">~1.5 cups &middot; with dressing</div>
+            </div>
+            <div class="meal-cal">420 <span class="meal-cal-unit">cal</span></div>
+          </div>
+          <div class="meal-card">
+            <div class="meal-icon" style="background:#FFF8E1">&#127822;</div>
+            <div class="meal-info">
+              <div class="meal-name">Apple</div>
+              <div class="meal-meta">1 medium</div>
+            </div>
+            <div class="meal-cal">95 <span class="meal-cal-unit">cal</span></div>
+          </div>
+
+          <!-- Snack -->
+          <div class="meal-section-title" style="margin-top:20px">Snack &middot; 3:45 PM</div>
+          <div class="meal-card">
+            <div class="meal-icon" style="background:#FCE4EC">&#127855;</div>
+            <div class="meal-info">
+              <div class="meal-name">Greek Yogurt</div>
+              <div class="meal-meta">1 cup &middot; with honey</div>
+            </div>
+            <div class="meal-cal">225 <span class="meal-cal-unit">cal</span></div>
+          </div>
+        </div>
+        <!-- Tab Bar -->
+        <div class="tab-bar">
+          <div class="tab-item"><div class="tab-icon">&#127760;</div>Log</div>
+          <div class="tab-item active"><div class="tab-icon">&#127828;</div>Today</div>
+          <div class="tab-item"><div class="tab-icon">&#128247;</div>Snap</div>
+          <div class="tab-item"><div class="tab-icon">&#128200;</div>Insights</div>
+          <div class="tab-item"><div class="tab-icon">&#9881;</div>Settings</div>
+        </div>
+      </div>
+      <div class="home-indicator"><span></span></div>
+    </div>
+    <div class="screen-notes">
+      Scrollable daily log grouped by meal.<br>
+      Date strip for quick day navigation.<br>
+      Summary row shows key totals at a glance.
+    </div>
+  </div>
+
+  <!-- SCREEN 6 ─ Daily Summary / Insights -->
+  <div class="screen-wrapper">
+    <div class="screen-label">6 — Daily Summary</div>
+    <div class="phone summary-screen">
+      <div class="dynamic-island"></div>
+      <div class="status-bar status-bar-light">
+        <span class="time">9:41</span>
+        <div class="icons"><span>&#9679;&#9679;&#9679;&#9679;</span> <span>&#9632;</span></div>
+      </div>
+      <div class="screen-content">
+        <div class="summary-header">
+          <div class="summary-title">Daily Summary</div>
+          <div class="summary-subtitle">Friday, Feb 16</div>
+          <div class="summary-cal-big">
+            <span class="summary-cal-num">1,240</span>
+            <span class="summary-cal-of">/ 2,100 kcal</span>
+          </div>
+          <div class="summary-progress-bar"><div class="summary-progress-fill"></div></div>
+        </div>
+        <div class="summary-body">
+          <!-- Macro Circles -->
+          <div class="summary-macro-circles">
+            <div class="macro-circle-item">
+              <div class="macro-circle" style="background: conic-gradient(#FF9800 0deg 130deg, #f0f0f0 130deg 360deg);">
+                <div class="macro-circle-inner">
+                  <span class="macro-circle-val" style="color:#FF9800">112g</span>
+                  <span class="macro-circle-unit">/ 250g</span>
+                </div>
+              </div>
+              <span class="macro-circle-label">Carbs</span>
+            </div>
+            <div class="macro-circle-item">
+              <div class="macro-circle" style="background: conic-gradient(#2196F3 0deg 200deg, #f0f0f0 200deg 360deg);">
+                <div class="macro-circle-inner">
+                  <span class="macro-circle-val" style="color:#2196F3">86g</span>
+                  <span class="macro-circle-unit">/ 150g</span>
+                </div>
+              </div>
+              <span class="macro-circle-label">Protein</span>
+            </div>
+            <div class="macro-circle-item">
+              <div class="macro-circle" style="background: conic-gradient(#E91E63 0deg 160deg, #f0f0f0 160deg 360deg);">
+                <div class="macro-circle-inner">
+                  <span class="macro-circle-val" style="color:#E91E63">48g</span>
+                  <span class="macro-circle-unit">/ 70g</span>
+                </div>
+              </div>
+              <span class="macro-circle-label">Fat</span>
+            </div>
+          </div>
+
+          <!-- Insights -->
+          <div class="meal-section-title">AI Insights</div>
+          <div class="insight-card">
+            <div class="insight-icon">&#128170;</div>
+            <div>
+              <div class="insight-title">Great protein intake</div>
+              <div class="insight-text">You're at 57% of your protein goal with dinner still to go. Keep it up!</div>
+            </div>
+          </div>
+          <div class="insight-card">
+            <div class="insight-icon">&#127813;</div>
+            <div>
+              <div class="insight-title">Add more veggies at dinner</div>
+              <div class="insight-text">Your fiber intake is a bit low today. A side of broccoli or spinach would help.</div>
+            </div>
+          </div>
+          <div class="insight-card">
+            <div class="insight-icon">&#128167;</div>
+            <div>
+              <div class="insight-title">Stay hydrated</div>
+              <div class="insight-text">You've logged 3 glasses so far. Try to reach 8 by the end of the day.</div>
+            </div>
+          </div>
+          <div class="insight-card">
+            <div class="insight-icon">&#127775;</div>
+            <div>
+              <div class="insight-title">3-day streak!</div>
+              <div class="insight-text">You've logged all meals for 3 days straight. Consistency is key.</div>
+            </div>
+          </div>
+        </div>
+        <!-- Tab Bar -->
+        <div class="tab-bar">
+          <div class="tab-item"><div class="tab-icon">&#127760;</div>Log</div>
+          <div class="tab-item"><div class="tab-icon">&#127828;</div>Today</div>
+          <div class="tab-item"><div class="tab-icon">&#128247;</div>Snap</div>
+          <div class="tab-item active"><div class="tab-icon">&#128200;</div>Insights</div>
+          <div class="tab-item"><div class="tab-icon">&#9881;</div>Settings</div>
+        </div>
+      </div>
+      <div class="home-indicator"><span></span></div>
+    </div>
+    <div class="screen-notes">
+      Green gradient header with calorie progress.<br>
+      Macro donut charts for quick visual balance.<br>
+      AI-generated insights personalize the experience.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- Design Notes                                        -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="section-divider"><span>Design Notes</span></div>
+
+<div style="max-width:800px; margin: 0 auto; background:#fff; border-radius:20px; padding:32px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+  <h2 style="font-size:18px; margin-bottom:20px;">Design System</h2>
+
+  <h3 style="font-size:15px; margin-bottom:8px; color:#4CAF50;">Color Palette</h3>
+  <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:20px;">
+    <div style="display:flex; align-items:center; gap:8px;">
+      <div style="width:32px; height:32px; border-radius:8px; background:#4CAF50;"></div>
+      <div><strong style="font-size:13px;">#4CAF50</strong><br><span style="font-size:11px;color:#999;">Primary / Green</span></div>
+    </div>
+    <div style="display:flex; align-items:center; gap:8px;">
+      <div style="width:32px; height:32px; border-radius:8px; background:#2196F3;"></div>
+      <div><strong style="font-size:13px;">#2196F3</strong><br><span style="font-size:11px;color:#999;">Protein / Blue</span></div>
+    </div>
+    <div style="display:flex; align-items:center; gap:8px;">
+      <div style="width:32px; height:32px; border-radius:8px; background:#FF9800;"></div>
+      <div><strong style="font-size:13px;">#FF9800</strong><br><span style="font-size:11px;color:#999;">Carbs / Orange</span></div>
+    </div>
+    <div style="display:flex; align-items:center; gap:8px;">
+      <div style="width:32px; height:32px; border-radius:8px; background:#E91E63;"></div>
+      <div><strong style="font-size:13px;">#E91E63</strong><br><span style="font-size:11px;color:#999;">Fat / Pink</span></div>
+    </div>
+    <div style="display:flex; align-items:center; gap:8px;">
+      <div style="width:32px; height:32px; border-radius:8px; background:#9C27B0;"></div>
+      <div><strong style="font-size:13px;">#9C27B0</strong><br><span style="font-size:11px;color:#999;">Fiber / Purple</span></div>
+    </div>
+  </div>
+
+  <h3 style="font-size:15px; margin-bottom:8px; color:#4CAF50;">Typography</h3>
+  <p style="font-size:13px; color:#666; margin-bottom:20px; line-height:1.6;">
+    System font stack (SF Pro / Roboto). Weights: 400 (body), 600 (labels), 700 (headings), 800 (numbers/stats).
+    Scale: 11px micro &rarr; 13px caption &rarr; 14px body &rarr; 16-22px headings &rarr; 28-48px display numbers.
+  </p>
+
+  <h3 style="font-size:15px; margin-bottom:8px; color:#4CAF50;">Design Principles</h3>
+  <ul style="font-size:13px; color:#666; line-height:2; padding-left:20px;">
+    <li><strong>Camera-first:</strong> App opens directly to camera — zero taps to start scanning</li>
+    <li><strong>Instant feedback:</strong> Stepped progress indicators keep users engaged during analysis</li>
+    <li><strong>Glanceable data:</strong> Rings, bars, and color coding let users absorb info without reading</li>
+    <li><strong>Confidence signals:</strong> Show AI confidence % to build trust and set expectations</li>
+    <li><strong>Actionable insights:</strong> Don't just show numbers — provide context and suggestions</li>
+    <li><strong>Adjustability:</strong> Users can correct AI mistakes (portion size, food identification)</li>
+  </ul>
+
+  <h3 style="font-size:15px; margin-top:20px; margin-bottom:8px; color:#4CAF50;">User Flow</h3>
+  <p style="font-size:13px; color:#666; line-height:1.8;">
+    <strong>Happy path:</strong> Open app &rarr; Point camera &rarr; Tap shutter &rarr; Review photo &rarr; Tap "Analyze" &rarr; View results &rarr; Tap "Log Meal" &rarr; Done.<br>
+    <strong>Total taps from open to logged meal: 3</strong> (shutter &rarr; analyze &rarr; log)
+  </p>
+
+  <h3 style="font-size:15px; margin-top:20px; margin-bottom:8px; color:#4CAF50;">Navigation Structure</h3>
+  <p style="font-size:13px; color:#666; line-height:1.8;">
+    5-tab bottom navigation: <strong>Log</strong> (history) &middot; <strong>Today</strong> (daily food log) &middot;
+    <strong>Snap</strong> (camera — center) &middot; <strong>Insights</strong> (summary &amp; AI tips) &middot; <strong>Settings</strong> (profile &amp; goals)
+  </p>
+</div>
+
+</body>
+</html>
